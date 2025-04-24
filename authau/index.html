@@ -6,7 +6,6 @@
   <title>Quản lý Ecommerce</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="./index.css">
-  
 
 </head>
 <body>
@@ -24,17 +23,13 @@
     <!-- NỘI DUNG -->
     <div class="content_main">
       <!-- Thống kê -->
-      <div style="text-align: center; font-size: 36px;" id="stats" class="tab-content">
-        <h2>Trang Thống kê</h2>
-        <br>
-        <br>
-        <div style="display: flex; height: 40%; justify-content: center;">
-
+      <div id="stats" class="tab-content">
+        <h2 style="font-size: 36px;">Trang Thống kê</h2>
+        <div style="display: flex; justify-content: center;">
           <div>
-            <p id="totalCategories">Tổng danh mục: 0</p>
+            <p style="margin-top: 80px;" id="totalCategories">Tổng danh mục: 0</p>
             <img src="https://png.pngtree.com/png-vector/20220701/ourmid/pngtree-check-list-mark-icon-checklist-png-image_5452093.png" alt="">
           </div>
-
           <div>
             <p id="totalProducts">Tổng sản phẩm: 0</p>
             <img src="https://cdn.vietnambiz.vn/2019/8/15/product-review-writing-services-15658537611611796432875.jpg" alt="">
@@ -46,47 +41,68 @@
       <div id="cats" class="tab-content" style="display:none">
         <div class="header_main">
           <h2>Danh mục</h2>
-          <button id="addCategoryButton" class="btn_add">Thêm danh mục</button>
+          <button class="btn_add" onclick="openCategoryForm()">Thêm danh mục</button>
         </div>
         <div class="filter_search">
-          <select class="select_filter" >
-            <option  value="all">Tất cả</option>
-            <option value="active">Đang hoạt động</option>
-            <option value="inactive">Ngừng hoạt động</option>
+          <select class="select_filter">
+            <option value="all">Tất cả</option>
+            <option value="active">active</option>
+            <option value="inactive">inactive</option>
           </select>
           <select class="select_cat">
-            <option value="">Tất cả danh mục</option>
+            <option value="">All</option>
             <option value="Quần áo">Quần áo</option>
             <option value="Giày dép">Giày dép</option>
             <option value="Phụ kiện">Phụ kiện</option>
           </select>
           <input type="text" class="input_search" placeholder="Tìm kiếm tên">
-          <button onclick="filterCategoryList()" style="border-radius: 8px;" class="btn_filter"><i style="width: 40px; color: gray;" class="fa-solid fa-magnifying-glass"></i></button>
+          <button style="width:35px;" onclick="filterCategoryList()" class="btn_filter"><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
         <table class="table_data">
-          <thead>
-            <tr><th>Mã</th><th>Tên</th><th>Trạng thái</th><th>Chức năng</th></tr>
-          </thead>
+          <thead><tr><th>Mã</th><th>Tên</th><th>Trạng thái</th><th>Chức năng</th></tr></thead>
           <tbody id="categoriesTableBody"></tbody>
         </table>
-        <!-- Phân trang: giữ nguyên vị trí ngay dưới table -->
         <div id="categoriesPagination" class="pagination"></div>
       </div>
 
       <!-- Sản phẩm -->
       <div id="prods" class="tab-content" style="display:none">
-        <h2>Trang Sản phẩm</h2>
+        <div class="header_main">
+          <h2>Sản phẩm</h2>
+          <button class="btn_add" onclick="openProductForm()">Thêm sản phẩm</button>
+        </div>
         <table class="table_data">
-          <thead>
-            <tr><th>Mã</th><th>Tên</th><th>Giá</th><th>Chức năng</th></tr>
-          </thead>
+          <thead><tr><th>Mã</th><th>Tên</th><th>Giá</th><th>Chức năng</th></tr></thead>
           <tbody id="productsTableBody"></tbody>
         </table>
-        <button id="addProductButton" class="btn_add">Thêm sản phẩm</button>
       </div>
     </div>
   </div>
 
- <script src="./idnex.js"></script>
+  <!-- Modal thêm/sửa danh mục -->
+  <div id="categoryModal" class="modal">
+    <div class="modal_content">
+      <h3 id="categoryModalTitle">Thêm danh mục</h3>
+      <input type="hidden" id="categoryIdInput">
+      <input type="text" id="categoryNameInput" placeholder="Tên danh mục">
+      <button style="border-radius: 8px;" onclick="saveCategory()">Lưu</button>
+      <button style="border-radius: 8px;" onclick="closeModal('categoryModal')">Hủy</button>
+    </div>
+  </div>
+
+  <!-- Modal thêm/sửa sản phẩm -->
+  <div id="productModal" class="modal">
+    <div class="modal_content">
+      <h3 id="productModalTitle">Thêm sản phẩm</h3>
+      <input type="hidden" id="productIdInput">
+      <input type="text" id="productNameInput" placeholder="Tên sản phẩm">
+      <input type="number" id="productPriceInput" placeholder="Giá sản phẩm">
+      <button style="border-radius: 8px;" onclick="saveProduct()">Lưu</button>
+      <button style="border-radius: 8px;" onclick="closeModal('productModal')">Hủy</button>
+    </div>
+  </div>
+
+<script src="./idnex.js"></script>
 </body>
 </html>
+ 
