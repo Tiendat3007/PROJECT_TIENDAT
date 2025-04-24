@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" href="./login.css">
+</head>
+<body>
+    <div class="all">
+        <h1>Đăng nhập</h1>
+        <h3>Đăng nhập tài khoản để sử dụng dịch vụ</h3>
+        <div class="form_all">
+            <label for="login_email">Email</label>
+            <input type="text" id="login_email" placeholder="you@company.com" required>
+            <label for="login_password">Mật khẩu</label>
+            <input type="password" id="login_password" required>
+            <span>
+                <input type="checkbox" id="login_agree">
+                <label for="login_agree">Bạn đồng ý với <a href="#" style="color: blue;">chính sách và điều khoản</a></label>
+            </span>
+            <button type="button" onclick="loginUser()">Đăng nhập</button>
+            <div class="form_link">Bạn chưa có tài khoản? <a href="./register.html">Đăng ký</a></div>
+        </div>  
+    </div>
+    <script src="login.js"></script>
+</body>
+</html>

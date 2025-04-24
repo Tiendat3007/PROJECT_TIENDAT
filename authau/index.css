@@ -1,0 +1,165 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.layout_all {
+    display: flex;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+.menu_left {
+    width: 220px;
+    background-color: #f1f4f9;
+    padding: 20px;
+}
+
+.logo_text {
+    margin-bottom: 30px;
+    font-size: 20px;
+    color: #333;
+}
+
+.menu_list {
+    list-style: none;
+}
+
+.menu_item {
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.menu_item:hover,
+.menu_item.active {
+    background-color: #d0e7ff;
+    font-weight: bold;
+}
+
+.content_main {
+    flex: 1;
+    padding: 30px;
+    background: #fff;
+    overflow-y: auto;
+}
+
+.header_main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn_add {
+    background: #3b82f6;
+    color: #fff;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.filter_search {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.select_filter,
+.select_category,
+.input_search {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.table_data {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table_data th,
+.table_data td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+}
+
+.status.active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status.inactive {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.btn_edit,
+.btn_delete {
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+@media (max-width: 768px) {
+    .layout_all {
+        flex-direction: column;
+    }
+
+    .menu_left {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .menu_list {
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+    }
+
+    .content_main {
+        padding: 15px;
+    }
+
+    .filter_search {
+        flex-direction: column;
+    }
+
+    .select_filter,
+    .select_category,
+    .input_search {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu_item {
+        font-size: 14px;
+    }
+
+    .header_main {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn_add {
+        width: 100%;
+        padding: 12px 0;
+    }
+
+    .table_data th,
+    .table_data td {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
+

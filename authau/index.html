@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản lý Ecommerce</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+  <div class="layout_all">
+    <!-- MENU -->
+    <div class="menu_left">
+      <h2 class="logo_text">
+        <i style="color:red" class="fa-solid fa-fire"></i> Ecommerce
+      </h2>
+      <ul class="menu_list">
+        <li class="menu_item active" data-target="stats">
+          <i class="fa-solid fa-house"></i> Thống kê
+        </li>
+        <li class="menu_item" data-target="cats">
+          <i class="fa-solid fa-layer-group"></i> Danh mục
+        </li>
+        <li class="menu_item" data-target="prods">
+          <i class="fa-regular fa-folder"></i> Sản phẩm
+        </li>
+      </ul>
+    </div>
+
+    <!-- NỘI DUNG CHÍNH -->
+    <div class="content_main">
+      <!-- THỐNG KÊ -->
+      <div id="stats" class="tab-content" style="text-align: center; font-size: 36px;">
+        <h2>Trang Thống kê</h2>
+      </div>
+       <div>
+        <!-- trang tri o day -->
+       </div>
+      <!-- DANH MỤC -->
+      <div id="cats" class="tab-content" style="display:none">
+        <div class="header_main">
+          <h2>Danh mục</h2>
+          <button id="addCatBtn" class="btn_add">Thêm mới danh mục</button>
+        </div>
+        <div class="filter_search">
+          <select class="select_filter">
+            <option>Đang hoạt động</option>
+            <option>Ngừng hoạt động</option>
+          </select>
+          <select class="select_category">
+            <option>Quần áo</option>
+            <option>Giày dép</option>
+            <option>Phụ kiện</option>
+          </select>
+          <input type="text" class="input_search" placeholder="Tìm kiếm theo tên">
+          <button onclick="filtercategories(0)" class="btn_filter">Lọc</button>
+        </div>
+        <table class="table_data">
+          <thead>
+            <tr>
+              <th>Mã</th>
+              <th>Tên</th>
+              <th>Trạng thái</th>
+              <th>Chức năng</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- <td>123123</td>
+            <td>quần áo</td>
+            <td>Đang hoạt động</td>
+            <td>
+              <span class="btn_edit" data-id="${cat.id}">✏️</span>
+              <span class="btn_delete" data-id="${cat.id}">🗑️</span>
+            </td> -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SẢN PHẨM -->
+      <div id="prods" class="tab-content" style="display:none">
+        <h2>Trang Sản phẩm</h2>
+        <table class="table_data">
+          <thead>
+            <tr>
+              <th>Mã</th>
+              <th>Tên</th>
+              <th>Giá</th>
+              <th>Chức năng</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- <td>12322</td>
+            <td>quần áo</td>
+            <td>20₫</td>
+            <td>
+              <span class="btn_edit">✏️</span>
+              <span class="btn_delete">🗑️</span>
+            </td> -->
+          </tbody>
+        </table>
+        <button id="addProdBtn" class="btn_add">Thêm sản phẩm</button>
+      </div>
+    </div>
+  </div>
+  <script src="./idnex.js"></script>
+</body>
+</html>

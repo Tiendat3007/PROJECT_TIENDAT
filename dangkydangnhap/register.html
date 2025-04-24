@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký tài khoản</title>
+    <link rel="stylesheet" href="./register.css">
+</head>
+<body>
+    <div class="all">
+        <h1>Đăng ký tài khoản</h1>
+        <h3>Đăng ký tài khoản để sử dụng dịch vụ</h3>
+        <div class="form_all">
+            <div class="form_name">
+                <div class="name_edit">
+                    <label for="full_name">Họ và tên đệm</label>
+                    <input type="text" id="full_name" placeholder="Họ và tên đệm" required>
+                </div>
+                <div class="name_edit">
+                    <label for="first_name">Tên</label>
+                    <input type="text" id="first_name" placeholder="Tên" required>
+                </div>
+            </div>
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="you@company.com" required>
+            <label for="password">Mật khẩu</label>
+            <input type="password" id="password" required>
+            <label for="confirm_password">Xác nhận mật khẩu</label>
+            <input type="password" id="confirm_password" required>
+            <span>
+                <input type="checkbox" id="agree_terms">
+                <label for="agree_terms">Bạn đồng ý với <a href="#" style="color: blue;">chính sách và điều khoản</a></label>
+            </span>
+            <button type="button" onclick="registerUser()">Đăng ký</button>
+            <div class="form_link">Bạn đã có tài khoản? <a href="./login.html">Đăng nhập</a></div>
+        </div>  
+    </div>
+    <script src="register.js"></script>
+</body>
+</html>
