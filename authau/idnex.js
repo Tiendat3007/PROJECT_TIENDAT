@@ -1,170 +1,181 @@
-let itemList = [];
-let itemProductsList = [];
 
-document.addEventListener('DOMContentLoaded', () => {
-  function loadData() {
-    const raw = localStorage.getItem('ecomData');
-    return raw ? JSON.parse(raw) : {
-      categories: itemList,
-      products: itemProductsList
-    };
-  }
+// Dữ liệu & lưu trữ
+const appData = { categories: [], products: [] };
+function loadAppData() {
+  const raw = localStorage.getItem('ecomData');
+  if (raw) Object.assign(appData, JSON.parse(raw));
+}
+function saveAppData() {
+  localStorage.setItem('ecomData', JSON.stringify(appData));
+}
 
-  function saveData() {
-    localStorage.setItem('ecomData', JSON.stringify(data));
-  }
+// Danh sách đã lọc và phân trang
+let filteredCategories = [];
+let currentCategoryPage = 1;
+const categoriesPerPage = 3;
 
-  const data = loadData();
+// DOM Elements
+const totalCategoriesEl = document.getElementById('totalCategories');
+const totalProductsEl   = document.getElementById('totalProducts');
+const categoriesBody    = document.getElementById('categoriesTableBody');
+const productsBody      = document.getElementById('productsTableBody');
+const paginationEl      = document.getElementById('categoriesPagination');
+const statusFilterEl    = document.querySelector('.select_filter');
+const categoryFilterEl  = document.querySelector('.select_cat');
+const searchInputEl     = document.querySelector('.input_search');
 
-  function editCategory(id) {
-    const cat = data.categories.find(c => c.id === id);
-    const newName = prompt('Sửa tên danh mục:', cat.name);
-    if (newName) {
-      cat.name = newName;
-      saveData();
-      renderCategories();
-      renderStats();
-    }
-  }
+// Render thống kê
+function renderStatistics() {
+  totalCategoriesEl.textContent = 'Tổng danh mục: ' + appData.categories.length;
+  totalProductsEl.textContent   = 'Tổng sản phẩm: ' + appData.products.length;
+}
 
-  function deleteCategory(id) {
-    if (confirm('Bạn có chắc muốn xoá danh mục này?')) {
-      data.categories = data.categories.filter(c => c.id !== id);
-      saveData();
-      renderCategories();
-      renderStats();
-    }
-  }
-
-  function editProduct(id) {
-    const prod = data.products.find(p => p.id === id);
-    const newName = prompt('Sửa tên sản phẩm:', prod.name);
-    const newPrice = parseInt(prompt('Sửa giá sản phẩm:', prod.price), 10);
-    if (newName && !isNaN(newPrice)) {
-      prod.name = newName;
-      prod.price = newPrice;
-      saveData();
-      renderProducts();
-      renderStats();
-    }
-  }
-
-  function deleteProduct(id) {
-    if (confirm('Bạn có chắc muốn xoá sản phẩm này?')) {
-      data.products = data.products.filter(p => p.id !== id);
-      saveData();
-      renderProducts();
-      renderStats();
-    }
-  }
-
-  function renderStats() {
-    document.getElementById('stats').innerHTML = `
-      <h2>Trang Thống kê</h2>
-      <p>Tổng danh mục: ${data.categories.length}</p>
-      <p>Tổng sản phẩm: ${data.products.length}</p>
-    `;
-  }
-
-  function renderCategories(list = data.categories) {
-    const tbody = document.querySelector('#cats tbody');
-    tbody.innerHTML = '';
-    for (let cat of list) {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${cat.id}</td>
-        <td>${cat.name}</td>
-        <td><span class="status ${cat.status}">` +
-          (cat.status === 'active' ? 'Đang hoạt động' : 'Ngừng hoạt động') +
-        `</span></td>
+// Render bảng danh mục
+function renderCategoryTable() {
+  categoriesBody.innerHTML = '';
+  const totalItems = filteredCategories.length;
+  const totalPages = Math.ceil(totalItems / categoriesPerPage) || 1;
+  if (currentCategoryPage > totalPages) currentCategoryPage = totalPages;
+  const startIndex = (currentCategoryPage - 1) * categoriesPerPage;
+  const pageItems = filteredCategories.slice(startIndex, startIndex + categoriesPerPage);
+  pageItems.forEach(item => {
+    categoriesBody.insertAdjacentHTML('beforeend', `
+      <tr>
+        <td>${item.id}</td>
+        <td>${item.name}</td>
+        <td>${item.status === 'active' ? 'Đang hoạt động' : 'Ngừng hoạt động'}</td>
         <td>
-          <span class="btn_edit" data-id="${cat.id}">✏️</span>
-          <span class="btn_delete" data-id="${cat.id}">🗑️</span>
-        </td>`;
-      tbody.appendChild(tr);
-    }
+          <span onclick="editCategoryById('${item.id}')">✏️</span>
+          <span onclick="deleteCategoryById('${item.id}')">🗑️</span>
+        </td>
+      </tr>`);
+  });
+  renderCategoryPaginationControls(totalPages);
+}
 
-    document.querySelectorAll('#cats .btn_edit')
-      .forEach(el => el.addEventListener('click', () => editCategory(el.dataset.id)));
-    document.querySelectorAll('#cats .btn_delete')
-      .forEach(el => el.addEventListener('click', () => deleteCategory(el.dataset.id)));
+// Render phân trang
+function renderCategoryPaginationControls(totalPages) {
+  paginationEl.innerHTML = '';
+  if (totalPages <= 1) return;
+  if (currentCategoryPage > 1) {
+    paginationEl.insertAdjacentHTML('beforeend', `<button class="prev" onclick="changeCategoryPage(${currentCategoryPage - 1})">« Prev</button>`);
   }
+  for (let i = 1; i <= totalPages; i++) {
+    paginationEl.insertAdjacentHTML('beforeend', `<button class="${i === currentCategoryPage ? 'active' : ''}" onclick="changeCategoryPage(${i})">${i}</button>`);
+  }
+  if (currentCategoryPage < totalPages) {
+    paginationEl.insertAdjacentHTML('beforeend', `<button class="next" onclick="changeCategoryPage(${currentCategoryPage + 1})">Next »</button>`);
+  }
+}
 
-  function renderProducts() {
-    const tbody = document.querySelector('#prods tbody');
-    tbody.innerHTML = '';
-    for (let p of data.products) {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
+function changeCategoryPage(page) {
+  currentCategoryPage = page;
+  renderCategoryTable();
+}
+
+// Render bảng sản phẩm
+function renderProductTable() {
+  productsBody.innerHTML = '';
+  appData.products.forEach(p => {
+    productsBody.insertAdjacentHTML('beforeend', `
+      <tr>
         <td>${p.id}</td>
         <td>${p.name}</td>
         <td>${p.price.toLocaleString()}₫</td>
         <td>
-          <span class="btn_edit" data-id="${p.id}">✏️</span>
-          <span class="btn_delete" data-id="${p.id}">🗑️</span>
-        </td>`;
-      tbody.appendChild(tr);
-    }
+          <span onclick="editProductById('${p.id}')">✏️</span>
+          <span onclick="deleteProductById('${p.id}')">🗑️</span>
+        </td>
+      </tr>`);
+  });
+}
 
-    document.querySelectorAll('#prods .btn_edit')
-      .forEach(el => el.addEventListener('click', () => editProduct(el.dataset.id)));
-    document.querySelectorAll('#prods .btn_delete')
-      .forEach(el => el.addEventListener('click', () => deleteProduct(el.dataset.id)));
+// Chỉnh sửa & xóa danh mục
+function editCategoryById(id) {
+  const cat = appData.categories.find(c => c.id === id);
+  const newName = prompt('Sửa tên danh mục:', cat.name);
+  if (newName) {
+    cat.name = newName;
+    saveAppData(); applyFilters(); renderStatistics();
   }
-
-  const tabs = document.querySelectorAll('.menu_item');
-  const contents = document.querySelectorAll('.tab-content');
-  for (let tab of tabs) {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      const tgt = tab.dataset.target;
-      contents.forEach(c => c.style.display = c.id === tgt ? 'block' : 'none');
-      if (tgt === 'stats') renderStats();
-      if (tgt === 'cats') renderCategories();
-      if (tgt === 'prods') renderProducts();
-    });
+}
+function deleteCategoryById(id) {
+  if (confirm('Bạn có chắc muốn xóa danh mục này?')) {
+    appData.categories = appData.categories.filter(c => c.id !== id);
+    saveAppData(); applyFilters(); renderStatistics();
   }
+}
 
-  document.getElementById('addCatBtn').addEventListener('click', () => {
+// Chỉnh sửa & xóa sản phẩm
+function editProductById(id) {
+  const prod = appData.products.find(p => p.id === id);
+  const newName = prompt('Sửa tên sản phẩm:', prod.name);
+  const newPrice = parseInt(prompt('Sửa giá sản phẩm:', prod.price), 10);
+  if (newName && !isNaN(newPrice)) {
+    prod.name = newName;
+    prod.price = newPrice;
+    saveAppData(); renderProductTable(); renderStatistics();
+  }
+}
+function deleteProductById(id) {
+  if (confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
+    appData.products = appData.products.filter(p => p.id !== id);
+    saveAppData(); renderProductTable(); renderStatistics();
+  }
+}
+
+// Lọc và reset phân trang
+function applyFilters() {
+  const status = statusFilterEl.value;
+  const catValue = categoryFilterEl.value.toLowerCase();
+  const kw = searchInputEl.value.toLowerCase();
+  filteredCategories = appData.categories.filter(c =>
+    (status === 'all' || c.status === status) &&
+    (!catValue || c.name.toLowerCase() === catValue) &&
+    (!kw || c.name.toLowerCase().includes(kw))
+  );
+  currentCategoryPage = 1;
+  renderCategoryTable();
+}
+function filterCategoryList() {
+  applyFilters();
+}
+
+// Khởi tạo ứng dụng
+document.addEventListener('DOMContentLoaded', () => {
+  loadAppData();
+  filteredCategories = [...appData.categories];
+  renderStatistics();
+  renderCategoryTable();
+  renderProductTable();
+
+  document.getElementById('addCategoryButton').onclick = () => {
     const name = prompt('Tên danh mục mới:');
     if (name) {
-      const id = 'MA' + String(data.categories.length + 1).padStart(3, '0');
-      data.categories.push({ id, name, status: 'active' });
-      saveData();
-      renderCategories();
-      renderStats();
+      const id = 'MA' + String(appData.categories.length + 1).padStart(3, '0');
+      appData.categories.push({ id, name, status: 'active' });
+      saveAppData(); applyFilters(); renderStatistics();
     }
-  });
+  };
 
-  document.getElementById('addProdBtn').addEventListener('click', () => {
+  document.getElementById('addProductButton').onclick = () => {
     const name = prompt('Tên sản phẩm:');
     const price = parseInt(prompt('Giá sản phẩm:'), 10);
     if (name && !isNaN(price)) {
-      const id = 'SP' + String(data.products.length + 1).padStart(3, '0');
-      data.products.push({ id, name, price });
-      saveData();
-      renderProducts();
-      renderStats();
+      const id = 'SP' + String(appData.products.length + 1).padStart(3, '0');
+      appData.products.push({ id, name, price });
+      saveAppData(); renderProductTable(); renderStatistics();
     }
+  };
+
+  // Chuyển tab
+  document.querySelectorAll('.menu_item').forEach(tab => {
+    tab.onclick = () => {
+      document.querySelectorAll('.menu_item').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+      document.getElementById(tab.dataset.target).style.display = 'block';
+      if (tab.dataset.target === 'stats') renderStatistics();
+    };
   });
-  renderStats();
-  renderCategories();
-  renderProducts();
 });
-function filtercategories(index) {
-    const filterBox = document.querySelectorAll(".select_filter")[index];
-  
-    const statusValue = filterBox.querySelector(".select_filter").value;
-    const categoryValue = filterBox.querySelector(".select_category").value.trim().toLowerCase();
-    const keyword = filterBox.querySelector(".input_search").value.trim().toLowerCase();
-  
-    const filtered = data.categories.filter(cat => {
-      const matchStatus = statusValue === "all" || cat.status === statusValue;
-      const matchCategory = categoryValue === "" || cat.name.toLowerCase().includes(categoryValue);
-      const matchKeyword = cat.name.toLowerCase().includes(keyword);
-      return matchStatus && matchCategory && matchKeyword;
-    });
-  
-    renderCategories(filtered);
-  }

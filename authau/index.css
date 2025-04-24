@@ -73,7 +73,7 @@
 .input_search {
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 6px;
+    border-radius: 8px;
 }
 
 .table_data {
@@ -109,6 +109,25 @@
     cursor: pointer;
     margin-right: 8px;
 }
+.pagination {
+    text-align: center;
+    margin: 16px 0;
+  }
+  .pagination button {
+    font-size: 12px;
+    margin: 0 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  .pagination button.prev,
+  .pagination button.next {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .pagination button.active {
+    font-weight: bold;
+    text-decoration: underline;
+  }
 
 @media (max-width: 768px) {
     .layout_all {
