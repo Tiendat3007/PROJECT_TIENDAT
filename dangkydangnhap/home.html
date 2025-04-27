@@ -1,20 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang chủ</title>
-    <link rel="stylesheet" href="./home.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trang chủ</title>
+  <link rel="stylesheet" href="./home.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 <body>
-    <div class="all">
-        <h1>Chào mừng đến với trang chủ!</h1>
-        <div class="user_info">
-            <p id="welcome_message"></p>
-            <button onclick="logout()">Đăng xuất</button>
+    <nav class="navbar">
+        <div class="navbar-left" style="margin-left: 200px;">
+            <div class="logo">
+              <img src="./Logo Vector.png" alt="">
+            </div>
+          
+            <div class="search-bar">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" placeholder="Tìm kiếm">
+            </div>
+          </div>
+        <ul class="nav-links">
+          <li><a href="#">Trang chủ</a></li>
+          <li><a href="#">Giới thiệu</a></li>
+          <li><a href="#">Liên hệ</a></li>
+        </ul>
+        <div class="icons">
+            <i class="fa-regular fa-heart"></i>
+            <i class="fa-solid fa-cart-shopping"></i>
+            <i class="fas fa-user-ninja"></i>
         </div>
-    </div>
+      </nav>
+      <div class="top-bar">
+        <a href="#"><i class="fas fa-mobile-alt"></i>Điện thoại</a>
+        <a href="#"><i class="fas fa-laptop"></i>Laptop</a>
+        <a href="#"><i class="fas fa-watch-smart"></i>Đồng hồ thông minh</a>
+        <a href="#"><i class="fas fa-camera"></i>Cameras</a>
+        <a href="#"><i class="fas fa-headphones"></i>Tai nghe</a>
+        <a href="#"><i class="fas fa-gamepad"></i>Gaming</a>
+      </div>
+    
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="hero-text">
+          <small>Đột phá công nghệ</small>
+          <h1>IPhone 14 <span>Pro</span></h1>
+          <p>Được tạo ra để thay đổi mọi thứ để tốt hơn. Cho tất cả mọi người.</p>
+          <button>Mua ngay</button>
+        </div>
+        <div class="slider-wrapper">
+          <div class="slides">
+            <div class="banner">
+              <div class="image">
+                <img src="./20ae4cc7d95ed194279d337796d951679b146d4a.png" alt="iPhone 14 Pro">
+              </div>
+            </div>
+            <div class="banner">
+              <div class="image">
+                <img src="./3d3524e6a19b0e89deffaac15d27ea38307ee37d.png" alt="MacBook Air M2">
+              </div>
+            </div>
+            <div class="banner">
+              <div class="image">
+                <img src="./852e7616c4e83cbf926e63efe881b44d767d0524.png" alt="MacBook Air M2">
+              </div>
+            </div>
+            <div class="banner">
+              <div class="image">
+                <img src="./d033728554372912fd195b8365c264bc9dc187f8.png" alt="MacBook Air M2">
+              </div>
+            </div>
+            <!-- Thêm banner khác nếu cần -->
+          </div>
+          <div class="dots"></div>
+        </div>
+      </section>
+  
+      <h2 class="discount_title">Danh muc sản phẩm</h2>
+      <div class="menu_categories">
+        <button>Điện thoại</button>
+        <button>Đồng hồ</button>
+        <button>Cameras</button>
+        <button>Tai nghe</button>
+        <button>Máy tính</button>
+        <button>Gaming</button>
+      </div>
+      
+    
+            <div class="tab_section">
+        <button class="active_tab">New Arrival</button>
+        <button>Bestseller</button>
+        <button>Featured Products</button>
+      </div>
+      
+      <!-- Grid sản phẩm -->
+      <div class="product_grid">
+        <div class="product_card">
+          <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="iPhone">
+          <h3>Apple iPhone 14 Pro Max</h3>
+          <p class="price">$900</p>
+          <button class="buy_btn">Mua ngay</button>
+        </div>
+      
+        <div class="product_card">
+          <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="Camera">
+          <h3>Blackmagic Pocket Cinema 6K</h3>
+          <p class="price">$2535</p>
+          <button class="buy_btn">Mua ngay</button>
+        </div>
+        <div class="product_card">
+            <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="iPhone">
+            <h3>Apple iPhone 14 Pro Max</h3>
+            <p class="price">$900</p>
+            <button class="buy_btn">Mua ngay</button>
+          </div>
+        
+          <div class="product_card">
+            <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="Camera">
+            <h3>Blackmagic Pocket Cinema 6K</h3>
+            <p class="price">$2535</p>
+            <button class="buy_btn">Mua ngay</button>
+          </div>
+          <div class="product_card">
+            <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="iPhone">
+            <h3>Apple iPhone 14 Pro Max</h3>
+            <p class="price">$900</p>
+            <button class="buy_btn">Mua ngay</button>
+          </div>
+        
+          <div class="product_card">
+            <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="Camera">
+            <h3>Blackmagic Pocket Cinema 6K</h3>
+            <p class="price">$2535</p>
+            <button class="buy_btn">Mua ngay</button>
+          </div>
+          <div class="product_card">
+            <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="iPhone">
+            <h3>Apple iPhone 14 Pro Max</h3>
+            <p class="price">$900</p>
+            <button class="buy_btn">Mua ngay</button>
+          </div>
+        
+          <div class="product_card">
+            <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="Camera">
+            <h3>Blackmagic Pocket Cinema 6K</h3>
+            <p class="price">$2535</p>
+            <button class="buy_btn">Mua ngay</button>
+          </div>
+          <div class="product_card">
+            <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="iPhone">
+            <h3>Apple iPhone 14 Pro Max</h3>
+            <p class="price">$900</p>
+            <button class="buy_btn">Mua ngay</button>
+          </div>
+        
+          <div class="product_card">
+            <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="Camera">
+            <h3>Blackmagic Pocket Cinema 6K</h3>
+            <p class="price">$2535</p>
+            <button class="buy_btn">Mua ngay</button>
+          </div>
+          <div class="product_card">
+            <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="iPhone">
+            <h3>Apple iPhone 14 Pro Max</h3>
+            <p class="price">$900</p>
+            <button class="buy_btn">Mua ngay</button>
+          </div>
+        
+          <div class="product_card">
+            <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="Camera">
+            <h3>Blackmagic Pocket Cinema 6K</h3>
+            <p class="price">$2535</p>
+            <button class="buy_btn">Mua ngay</button>
+          </div>
+      
+        <!-- Thêm sản phẩm khác ở đây -->
+      </div>
+      
+      <!-- Sản phẩm giảm giá -->
+      <h2 class="discount_title">Sản phẩm giảm giá </h2>
+      <div class="product_grid">
+        <div class="product_card">
+          <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="iPhone vàng">
+          <h3>iPhone 14 Pro 512GB Gold</h3>
+          <p class="price">$1437</p>
+          <button class="buy_btn">Mua ngay</button>
+        </div>
+      
+        <div class="product_card">
+          <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="AirPods">
+          <h3>AirPods Max Silver</h3>
+          <p class="price">$549</p>
+          <button class="buy_btn">Mua ngay</button>
+        </div>
+        <div class="product_card">
+            <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="iPhone vàng">
+            <h3>iPhone 14 Pro 512GB Gold</h3>
+            <p class="price">$1437</p>
+            <button class="buy_btn">Mua ngay</button>
+          </div>
+        
+          <div class="product_card">
+            <img src="https://cdn2.fptshop.com.vn/unsafe/828x0/filters:format(webp):quality(75)/2022_10_28_638025690990948324_iPhone%2014%20Pro%20(4).jpg" alt="AirPods">
+            <h3>AirPods Max Silver</h3>
+            <p class="price">$549</p>
+            <button class="buy_btn">Mua ngay</button>
+          </div>
+      </div>
+      
+      <section class="summer-banner">
+        <div class="banner-content">
+          <h1>Ưu đãi mùa hè</h1>
+          <p>Nhanh tay săn đón các sản phẩm chất lượng</p>
+          <button>Mua ngay</button>
+          <img src="./4a26738ead31cbe399461c13312a3bd013818a4a.png" alt="" class="product_img img3">
+          <img src="./852e7616c4e83cbf926e63efe881b44d767d0524.png" alt="" class="product_img img2">
+          <img src="./d033728554372912fd195b8365c264bc9dc187f8.png" alt="" class="product_img img1">
+          <img src="./image 18 (2).png" alt="" class="product_img img5">
+          <img src="./3d3524e6a19b0e89deffaac15d27ea38307ee37d.png" alt="" class="product_img img4">
+        
+      </section>
+      
+      <!-- Footer -->
+      <footer class="main-footer">
+        <div class="footer-container">
+          <div class="footer-col">
+            <h2> <img style="width: 100px;" src="./Logo Vector (1).png" alt=""> </h2>
+            <br>
+            <p>
+              Chúng tôi cung cấp các sản phẩm công nghệ, giúp khách hàng tận hưởng trải nghiệm dịch vụ, tiện ích nhanh chóng và hiệu quả.
+            </p>
+            <div class="social-icons">
+              <i class="fab fa-twitter"></i>
+              <i class="fab fa-facebook-f"></i>
+              <i class="fab fa-tiktok"></i>
+              <i class="fab fa-youtube"></i>
+            </div>
+          </div>
+      
+          <div class="footer-col">
+            <h4>Dịch vụ</h4>
+            <ul>
+              <li>Chương trình khuyến mãi</li>
+              <li>Gửi quà</li>
+              <li>Đảm bảo và hoàn tiền</li>
+              <li>Vận chuyển & giao hàng</li>
+              <li>Thanh toán</li>
+            </ul>
+          </div>
+      
+          <div class="footer-col">
+            <h4>Hỗ trợ cho người mua</h4>
+            <ul>
+              <li>Tìm kiếm đơn đặt hàng</li>
+              <li>Điều kiện giao hàng</li>
+              <li>Trao đổi và trả hàng</li>
+              <li>Chính sách bảo hành</li>
+              <li>Chính sách và bảo mật</li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+  <script src="home.js"></script>
 
-    <script src="home.js"></script>
 </body>
 </html>

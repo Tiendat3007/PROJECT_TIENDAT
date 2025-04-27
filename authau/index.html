@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Quản lý Ecommerce</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="./index.css">
-
+  <style>
+    /* Bạn có thể thêm CSS ở đây nếu cần */
+  </style>
 </head>
+
 <body>
   <div class="layout_all">
     <!-- MENU -->
@@ -43,23 +47,63 @@
           <h2>Danh mục</h2>
           <button class="btn_add" onclick="openCategoryForm()">Thêm danh mục</button>
         </div>
-        <div class="filter_search">
-          <select class="select_filter">
-            <option value="all">Tất cả</option>
-            <option value="active">active</option>
-            <option value="inactive">inactive</option>
-          </select>
-          <select class="select_cat">
-            <option value="">All</option>
-            <option value="Quần áo">Quần áo</option>
-            <option value="Giày dép">Giày dép</option>
-            <option value="Phụ kiện">Phụ kiện</option>
-          </select>
-          <input type="text" class="input_search" placeholder="Tìm kiếm tên">
-          <button style="width:35px;" onclick="filterCategoryList()" class="btn_filter"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <div style="display: flex; flex-direction: row-reverse;">
+          <div class="filter_search">
+            <select class="select_filter" onchange="filterCategoryList()">
+              <option value="all">Tất cả</option>
+              <option value="active">Đang hoạt động</option>
+              <option value="inactive">Ngưng hoạt động</option>
+            </select>
+            <select class="select_cat" onchange="filterCategoryList()">
+              <option value="">Tất cả</option>
+              <option value="Quần áo">Quần áo</option>
+              <option value="Giày dép">Giày dép</option>
+              <option value="Phụ kiện">Phụ kiện</option>
+            </select>
+            <input type="text" class="input_search" placeholder="Tìm kiếm tên" oninput="filterCategoryList()">
+            <button style="width:35px;" class="btn_filter"><i class="fa-solid fa-magnifying-glass"></i></button>
+          </div>
         </div>
+        <!-- Modal thêm/sửa danh mục -->
+<div id="categoryModal" class="modal" style="display: none;">
+  <div class="modal_content1">
+    <h3  id="categoryModalTitle">Thêm danh mục</h3>
+    <form>
+      <label id="label">Mã danh muc</label>
+      <input type="text" placeholder="mã danh muc">
+      <input type="hidden" id="categoryIdInput">
+      
+      <div class="form-group">
+        <label id="label" for="categoryNameInput">Tên danh mục</label>
+        <input type="text" id="categoryNameInput" placeholder="Tên danh mục" required>
+      </div>
+
+      <div class="form-group">
+        <label id="label">Trạng thái</label>
+        <div style="margin-top: 20px;">
+          <label><input type="radio" name="status" value="active" checked> Đang hoạt động</label>
+          <label><input type="radio" name="status" value="inactive"> Ngưng hoạt động</label>
+        </div>
+      </div>
+
+      <div class="modal_buttons">
+        
+        <button type="button" class="btn_cancel" onclick="closeModal('categoryModal')">Hủy</button>
+        <button type="button" class="btn_save" onclick="saveCategory()">Thêm</button>
+
+      </div>
+    </form>
+  </div>
+</div>
         <table class="table_data">
-          <thead><tr><th>Mã</th><th>Tên</th><th>Trạng thái</th><th>Chức năng</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Mã danh mục <i class="fa-solid fa-arrow-down"></i></th>
+              <th>Tên danh mục <i class="fa-solid fa-arrow-down"></i></th>
+              <th>Trạng thái</th>
+              <th>Chức năng</th>
+            </tr>
+          </thead>
           <tbody id="categoriesTableBody"></tbody>
         </table>
         <div id="categoriesPagination" class="pagination"></div>
@@ -72,37 +116,364 @@
           <button class="btn_add" onclick="openProductForm()">Thêm sản phẩm</button>
         </div>
         <table class="table_data">
-          <thead><tr><th>Mã</th><th>Tên</th><th>Giá</th><th>Chức năng</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Mã sản phẩm</th>
+              <th>Tên sản phẩm</th>
+              <th>Danh mục</th>
+              <th>Giá</th>
+              <th>Số lượng</th>
+              <th>Giảm giá</th>
+              <th>Trạng thái</th>
+              <th>Hình ảnh</th>
+              <th>Chức năng</th>
+            </tr>
+          </thead>
           <tbody id="productsTableBody"></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- Modal thêm/sửa danh mục -->
-  <div id="categoryModal" class="modal">
-    <div class="modal_content">
-      <h3 id="categoryModalTitle">Thêm danh mục</h3>
-      <input type="hidden" id="categoryIdInput">
-      <input type="text" id="categoryNameInput" placeholder="Tên danh mục">
-      <button style="border-radius: 8px;" onclick="saveCategory()">Lưu</button>
-      <button style="border-radius: 8px;" onclick="closeModal('categoryModal')">Hủy</button>
+<!-- Modal thêm/sửa sản phẩm -->
+<div id="productModal" class="modal" style="display:none;">
+  <div class="modal_content">
+    <h3 id="productModalTitle">Thêm sản phẩm</h3>
+    <form>
+
+      <!-- Mã sản phẩm và Tên sản phẩm -->
+      <div class="form-group">
+        <div>
+          <label id="label"  for="productIdInput">Mã sản phẩm</label>
+          <input type="text" id="productIdInput">
+        </div>
+        <div>
+          <label id="label" for="productNameInput">Tên sản phẩm</label>
+          <input type="text" id="productNameInput" placeholder="Tên sản phẩm" required>
+        </div>
+      </div>
+
+      <!-- Danh mục -->
+      <div class="form-group">
+        <label id="label" for="categorySelect">Danh mục</label>
+        <select id="categorySelect" required>
+          <option value="">Chọn danh mục</option>
+          <option value="Quần áo">Quần áo</option>
+          <option value="Giày dép">Giày dép</option>
+          <option value="Phụ kiện">Phụ kiện</option>
+        </select>
+       <!-- Trạng thái -->
+ <div class="status-group">
+  <label id="label">Trạng thái</label>
+  <div>
+    <label><input type="radio" name="status" value="active" checked> Đang hoạt động</label>
+    <label><input type="radio" name="status" value="inactive"> Ngưng hoạt động</label>
+  </div>
+</div>
+      </div>
+
+
+      
+      <!-- Giá, Số lượng, Giảm giá -->
+      <div id="pire" class="form-group">
+        <div>
+          <label id="label" for="productPriceInput">Giá sản phẩm</label>
+          <input type="number" id="productPriceInput" placeholder="Giá sản phẩm" required>
+        </div>
+        <div>
+          <label id="label" for="quantityInput">Số lượng</label>
+          <input type="number" id="quantityInput" placeholder="Số lượng" value="1" required>
+        </div>
+        <div>
+          <label id="label" for="discountInput">Giảm giá</label>
+          <input type="number" id="discountInput" placeholder="Giảm giá" value="0">
+        </div>
+      </div>
+
+      <!-- Link hình ảnh -->
+      <div class="full-width">
+        <label id="label" for="imageInput">Link hình ảnh</label>
+        <input type="text" id="imageInput" placeholder="Link hình ảnh" required>
+      </div>
+
+      <!-- Mô tả sản phẩm -->
+      <div class="full-width">
+        <label id="label" for="descriptionInput">Mô tả sản phẩm</label>
+        <textarea id="descriptionInput" placeholder="Mô tả sản phẩm" rows="4"></textarea>
+      </div>
+
+      
+      <!-- Buttons -->
+      <div class="modal_buttons">
+        
+        <button type="button" class="btn_cancel" onclick="closeModal('productModal')">Hủy</button>
+        <button type="button" class="btn_save" onclick="saveProduct()">Thêm</button>
+
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+    <!-- Buttons -->
+    <div class="modal_buttons">
+      <button class="btn_cancel" onclick="closeModal('productModal')">Hủy</button>
+      <button class="btn_save" onclick="saveProduct()">Thêm</button>
     </div>
   </div>
+</div>
 
-  <!-- Modal thêm/sửa sản phẩm -->
-  <div id="productModal" class="modal">
-    <div class="modal_content">
-      <h3 id="productModalTitle">Thêm sản phẩm</h3>
-      <input type="hidden" id="productIdInput">
-      <input type="text" id="productNameInput" placeholder="Tên sản phẩm">
-      <input type="number" id="productPriceInput" placeholder="Giá sản phẩm">
-      <button style="border-radius: 8px;" onclick="saveProduct()">Lưu</button>
-      <button style="border-radius: 8px;" onclick="closeModal('productModal')">Hủy</button>
-    </div>
-  </div>
 
-<script src="./idnex.js"></script>
+  <!-- JavaScript -->
+  <script>
+    const appData = { categories: [], products: [] };
+    function loadAppData() {
+      const raw = localStorage.getItem('ecomData');
+      if (raw) Object.assign(appData, JSON.parse(raw));
+    }
+    function saveAppData() {
+      localStorage.setItem('ecomData', JSON.stringify(appData));
+    }
+
+    let filteredCategories = [];
+    let currentCategoryPage = 1;
+    const categoriesPerPage = 3;
+
+    const totalCategoriesEl = document.getElementById('totalCategories');
+    const totalProductsEl = document.getElementById('totalProducts');
+    const categoriesBody = document.getElementById('categoriesTableBody');
+    const productsBody = document.getElementById('productsTableBody');
+    const paginationEl = document.getElementById('categoriesPagination');
+    const statusFilterEl = document.querySelector('.select_filter');
+    const categoryFilterEl = document.querySelector('.select_cat');
+    const searchInputEl = document.querySelector('.input_search');
+
+    function renderStatistics() {
+      totalCategoriesEl.textContent = 'Tổng danh mục: ' + appData.categories.length;
+      totalProductsEl.textContent = 'Tổng sản phẩm: ' + appData.products.length;
+    }
+
+    function renderCategoryTable() {
+      categoriesBody.innerHTML = '';
+      const totalItems = filteredCategories.length;
+      const totalPages = Math.ceil(totalItems / categoriesPerPage) || 1;
+      if (currentCategoryPage > totalPages) currentCategoryPage = totalPages;
+      const start = (currentCategoryPage - 1) * categoriesPerPage;
+      const pageItems = filteredCategories.slice(start, start + categoriesPerPage);
+      pageItems.forEach(c => {
+        categoriesBody.insertAdjacentHTML('beforeend', `
+          <tr>
+              <td>${c.id}</td>
+            <td>${c.name}</td>
+            <td>
+              <span class="status-badge ${c.status === 'active' ? 'status-active' : 'status-inactive'}">
+                <span class="dot"></span>
+                ${c.status === 'active' ? 'Đang hoạt động' : 'Ngưng hoạt động'}
+              </span>
+            </td>
+            <td>
+              <span onclick="editCategoryById('${c.id}')"><button>✏️</button></span>
+              <span onclick="deleteCategoryById('${c.id}')"><button>🗑️</button></span>
+            </td>
+          </tr>`);
+      });
+      renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+      paginationEl.innerHTML = '';
+      if (totalPages <= 1) return;
+      if (currentCategoryPage > 1) paginationEl.insertAdjacentHTML('beforeend', `<button onclick="changeCategoryPage(${currentCategoryPage - 1})">« Prev</button>`);
+      for (let i = 1; i <= totalPages; i++) {
+        paginationEl.insertAdjacentHTML('beforeend', `<button class="${i === currentCategoryPage ? 'active' : ''}" onclick="changeCategoryPage(${i})">${i}</button>`);
+      }
+      if (currentCategoryPage < totalPages) paginationEl.insertAdjacentHTML('beforeend', `<button onclick="changeCategoryPage(${currentCategoryPage + 1})">Next »</button>`);
+    }
+
+    function changeCategoryPage(p) { currentCategoryPage = p; renderCategoryTable(); }
+
+    function renderProductTable() {
+      productsBody.innerHTML = '';
+      appData.products.forEach(p => {
+        productsBody.insertAdjacentHTML('beforeend', `
+          <tr>
+            <td>${p.id}</td>
+            <td>${p.name}</td>
+            <td>${p.category}</td>
+            <td>${p.price.toLocaleString()}₫</td>
+            <td>${p.quantity}</td>
+            <td>${p.discount}%</td>
+            <td>
+              <span class="status-badge ${p.status === 'active' ? 'status-active' : 'status-inactive'}">
+                ${p.status === 'active' ? 'Đang hoạt động' : 'Ngưng hoạt động'}
+              </span>
+            </td>
+            <td><img src="${p.image}" alt="${p.name}" style="width:50px;height:50px;object-fit:cover;border-radius:5px;"></td>
+            <td>
+              <button onclick="editProductById('${p.id}')">✏️</button>
+              <button onclick="deleteProductById('${p.id}')">🗑️</button>
+            </td>
+          </tr>`);
+      });
+    }
+
+    function applyFilters() {
+      const status = statusFilterEl.value;
+      const catVal = categoryFilterEl.value.toLowerCase();
+      const kw = searchInputEl.value.toLowerCase();
+      filteredCategories = appData.categories.filter(c =>
+        (status === 'all' || c.status === status) &&
+        (!catVal || c.name.toLowerCase() === catVal) &&
+        (!kw || c.name.toLowerCase().includes(kw))
+      );
+      currentCategoryPage = 1;
+      renderCategoryTable();
+    }
+
+    function filterCategoryList() { applyFilters(); }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAppData();
+      filteredCategories = [...appData.categories];
+      applyFilters();
+      renderProductTable();
+      document.querySelectorAll('.menu_item').forEach(tab => {
+        tab.onclick = () => {
+          document.querySelectorAll('.menu_item').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+          document.getElementById(tab.dataset.target).style.display = 'block';
+          if (tab.dataset.target === 'stats') renderStatistics();
+        };
+      });
+    });
+
+    function openCategoryForm() {
+  document.getElementById('categoryIdInput').value = '';
+  document.getElementById('categoryNameInput').value = '';
+  document.getElementById('categoryModalTitle').textContent = 'Thêm danh mục';
+  document.getElementById('categoryModal').style.display = 'flex';
+}
+
+function editCategoryById(id) {
+  const cat = appData.categories.find(c => c.id === id);
+  if (!cat) return alert('Không tìm thấy danh mục!');
+  document.getElementById('categoryIdInput').value = cat.id;
+  document.getElementById('categoryNameInput').value = cat.name;
+  document.getElementById('categoryModalTitle').textContent = 'Sửa danh mục';
+  document.getElementById('categoryModal').style.display = 'flex';
+}
+
+function saveCategory() {
+  const id = document.getElementById('categoryIdInput').value; // Lấy ID
+  const name = document.getElementById('categoryNameInput').value.trim(); // Lấy tên và loại bỏ khoảng trắng
+  const status = document.querySelector('input[name="status"]:checked').value; // Lấy trạng thái
+
+  if (!name) return alert('Nhập tên danh mục'); // Kiểm tra tên có hợp lệ không
+
+  if (id) {
+    // Nếu có ID, cập nhật danh mục
+    const cat = appData.categories.find(c => c.id === id);
+    if (cat) {
+      cat.name = name;
+      cat.status = status; // Cập nhật trạng thái
+    }
+  } else {
+    // Nếu không có ID, thêm danh mục mới
+    const newId = 'DM' + String(appData.categories.length + 1).padStart(3, '0'); // Tạo ID mới
+    appData.categories.push({ id: newId, name, status }); // Thêm danh mục mới vào danh sách
+  }
+
+  saveAppData(); // Lưu dữ liệu vào localStorage
+  closeModal('categoryModal'); // Đóng modal
+  applyFilters(); // Cập nhật bảng danh mục
+}
+function deleteCategoryById(id) {
+  if (confirm('Bạn có chắc muốn xóa danh mục này?')) {
+    appData.categories = appData.categories.filter(c => c.id !== id);
+    saveAppData();
+    applyFilters(); // Cập nhật bảng danh mục
+  }
+}
+
+
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+    function openProductForm() {
+      document.getElementById('productIdInput').value = '';
+      document.getElementById('productNameInput').value = '';
+      document.getElementById('categorySelect').value = '';
+      document.querySelector('input[name="status"][value="active"]').checked = true;
+      document.getElementById('quantityInput').value = '1';
+      document.getElementById('productPriceInput').value = '';
+      document.getElementById('discountInput').value = '0';
+      document.getElementById('imageInput').value = '';
+      document.getElementById('descriptionInput').value = '';
+      document.getElementById('productModalTitle').textContent = 'Thêm sản phẩm';
+      document.getElementById('productModal').style.display = 'flex';
+    }
+
+    function editProductById(id) {
+  const product = appData.products.find(p => p.id === id);
+  if (!product) return alert('Không tìm thấy sản phẩm!');
+
+  const modal = document.getElementById('productModal');
+
+  // Điền thông tin sản phẩm vào các trường trong modal
+  modal.querySelector('#productIdInput').value       = product.id;
+  modal.querySelector('#productNameInput').value     = product.name;
+  modal.querySelector('#categorySelect').value       = product.category;
+  modal.querySelector(`input[name="status"][value="${product.status}"]`).checked = true;
+  modal.querySelector('#quantityInput').value        = product.quantity;
+  modal.querySelector('#productPriceInput').value    = product.price;
+  modal.querySelector('#discountInput').value        = product.discount;
+  modal.querySelector('#imageInput').value           = product.image;
+  modal.querySelector('#descriptionInput').value     = product.description;
+
+  // Thay đổi tiêu đề modal
+  modal.querySelector('#productModalTitle').textContent = 'Sửa sản phẩm';
+  
+  // Hiển thị modal
+  modal.style.display = 'flex';
+}
+
+function saveProduct() {
+  const modal = document.getElementById('productModal');
+
+  const id          = modal.querySelector('#productIdInput').value;
+  const name        = modal.querySelector('#productNameInput').value.trim();
+  const category    = modal.querySelector('#categorySelect').value;
+  const status      = modal.querySelector('input[name="status"]:checked').value;
+  const quantity    = parseInt(modal.querySelector('#quantityInput').value, 10) || 0;
+  const price       = parseInt(modal.querySelector('#productPriceInput').value, 10) || 0;
+  const discount    = parseInt(modal.querySelector('#discountInput').value, 10) || 0;
+  const image       = modal.querySelector('#imageInput').value.trim();
+  const description = modal.querySelector('#descriptionInput').value.trim();
+
+  if (!name || !price || !image) {
+    alert('Vui lòng nhập đủ Tên, Giá và Ảnh sản phẩm!');
+    return;
+  }
+
+  if (id) {
+    // Sửa sản phẩm
+    const p = appData.products.find(x => x.id === id);
+    if (p) {
+      Object.assign(p, { name, category, status, quantity, price, discount, image, description });
+    }
+  } else {
+    // Thêm mới
+    const newId = 'SP' + String(appData.products.length + 1).padStart(3, '0');
+    appData.products.push({ id: newId, name, category, status, quantity, price, discount, image, description });
+  }
+
+  saveAppData();
+  modal.style.display = 'none';
+  renderProductTable();
+  renderStatistics();
+}
+  </script>
 </body>
 </html>
- 
