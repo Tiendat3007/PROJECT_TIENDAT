@@ -84,6 +84,11 @@
   .form_link >a{
     text-decoration: none;
     color: rgb(59, 130, 246);
+
+  }
+  #emailexist{
+    color: red;
+    margin-left: 20px;
   }
   @media (max-width: 768px) {
     .form_name {

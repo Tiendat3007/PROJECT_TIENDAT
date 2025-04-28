@@ -124,7 +124,7 @@ body {
   display: flex;
   align-items: center;
   height: 600px;
-  background: #1a1a24;
+  background: linear-gradient(to right, #211C24, #3c3640);
   overflow: hidden;
 }
 
@@ -425,6 +425,7 @@ body {
   text-align: center;
   padding: 100px 20px;
   position: relative;
+  overflow: hidden;
 }
 
 .summer-banner h1 {
@@ -467,23 +468,28 @@ body {
   transition: all 0.3s ease;
 }
 
+
 .img1 {
-  left: 300px;
-  top: -20px;
-  height: 200px;
+  left: 190px;
+  top: -150px;
+  height: auto;
+  display: block;
+  width: 250px;
 }
 
 .img2 {
-  left: 100px;
-  top: 200px;
+  left: -20px;
+  top: 160px;
   height: 150px;
-  width: 200px;
+  width: 250px;
 
 }
 
 .img3 {
   right: 120px;
-  height: 150px;
+  height: 200px;
+  width: 280px;
+  bottom: -70px
 }
 
 .img4 {
@@ -496,7 +502,7 @@ body {
 .img5 {
   top: 10px;
   width: 200px;
-  left: 5%;
+  left: 20px
 }
 
 .footer-container {
