@@ -16,6 +16,8 @@ function logout() {
     // Xóa thông tin đăng nhập
     localStorage.removeItem('loggedInUser');
     
-    // Điều hướng về trang đăng nhập
-    window.location.href = './login.html';
+    // Hiển thị hộp thoại xác nhận đăng xuất
+    if (confirm("Bạn có muốn đăng xuất tài khoản không?")) {
+        window.location.href = './login.html';
+    }
 }

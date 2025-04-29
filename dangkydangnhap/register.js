@@ -51,7 +51,8 @@ function registerUser() {
     const user = {
         fullName: `${fullName} ${firstName}`,
         email: email,
-        password: password // chỉ demo, thực tế nên mã hóa!
+        password: password, // chỉ demo, thực tế nên mã hóa!
+        role: "user"
     };
 
     // Lưu user vào localStorage (danh sách users)

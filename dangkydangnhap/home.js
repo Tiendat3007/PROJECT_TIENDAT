@@ -35,3 +35,12 @@ goToSlide(0);
 startAuto();
 document.querySelector('.slider-wrapper').addEventListener('mouseenter', stopAuto);
 document.querySelector('.slider-wrapper').addEventListener('mouseleave', startAuto);
+function logout() {
+    // Xóa thông tin đăng nhập
+    localStorage.removeItem('loggedInUser');
+    
+    // Hiển thị hộp thoại xác nhận đăng xuất
+    if (confirm("Bạn có muốn đăng xuất tài khoản không?")) {
+        window.location.href = './login.html';
+    }
+}
