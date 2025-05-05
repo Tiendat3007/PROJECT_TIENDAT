@@ -1,8 +1,12 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+html, body {
+  height: 100%;
+}
+
 
 .layout_all {
     display: flex;
@@ -475,6 +479,54 @@ body {
 #pire div input[type="number"]:focus {
   border-color: #3b82f6; /* Xanh nhạt khi focus */
 }
+
+/* Overlay nền mờ full màn hình */
+/* Overlay + flex container */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;       /* bật bằng JS: 'flex' */
+  z-index: 1000;
+}
+
+/* Wrapper flex để căn giữa */
+.modalwrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center; /* ngang */
+  align-items: center;     /* dọc */
+}
+
+/* Hộp nội dung */
+.modalcontent {
+  background: #fff;
+  width: 360px;
+  height: 200px;
+  max-width: 90%;
+  padding: 20px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  
+}
+
+/* Nhóm nút */
+.btn-group {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.btn-group button {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.btn-group .cancel { background: #f2f2f2; color: #333; }
+.btn-group .confirm { background: #e74c3c; color: #fff; }
 
 
 

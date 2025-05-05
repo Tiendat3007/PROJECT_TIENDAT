@@ -6,6 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Quản lý Ecommerce</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+/>
   <link rel="stylesheet" href="./index.css">
   <style>
     /* Bạn có thể thêm CSS ở đây nếu cần */
@@ -59,25 +63,51 @@
               <option value="active">Đang hoạt động</option>
               <option value="inactive">Ngưng hoạt động</option>
             </select>
+            <select id="sort_select" onchange="filterCategoryList()">
+              <option value="">--sắp xếp--</option>
+              <option value="asc">sắp xếp theo tên (A-Z)</option>
+              <option value="desc">sắp xếp theo tên (Z-A)</option>
+            </select>
+            
             <select class="select_cat" onchange="filterCategoryList()">
               <option value="">Tất cả</option>
-              <option value="Quần áo">Quần áo</option>
-              <option value="Giày dép">Giày dép</option>
+              <option value="điện thoại">điện thoại</option>
+              <option value="laptop">laptop</option>
               <option value="Phụ kiện">Phụ kiện</option>
             </select>
             <input type="text" class="input_search" placeholder="Tìm kiếm tên" oninput="filterCategoryList()">
             <button style="width:35px;" class="btn_filter"><i class="fa-solid fa-magnifying-glass"></i></button>
           </div>
         </div>
+       
+        <!-- HTML -->
+<div id="deleteModal" class="modal" style="display: none;">
+  <div class="modalwrapper">
+    <div class="modalcontent">
+      <img style="border: 5px solid rgba(198, 231, 31, 0.384); border-radius: 50px;" src="../anh/alert-circle.png" alt="">
+      <h3>Xác nhận</h3>
+      <p>Bạn có chắc chắn muốn xóa <strong id="itemName"></strong> khỏi hệ thống không?</p>
+      <div class="btn-group">
+        <button class="cancel" onclick="cancelDelete()">Hủy</button>
+        <button class="confirm" onclick="confirmDelete()">Xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div id="alertContainer"
+     class="position-fixed top-0 end-0 p-3"
+     style="z-index: 1100; width: auto; max-width: 300px;">
+</div>
+        
 
         <!-- Modal thêm/sửa danh mục -->
 <div id="categoryModal" class="modal" style="display: none;">
   <div class="modal_content1">
     <h3  id="categoryModalTitle">Thêm danh mục</h3>
     <form>
-      <label id="label">Mã danh muc</label>
-      <input type="text" placeholder="mã danh muc">
+      <label id="label">Mã danh muc(tự động tăng dần (DM001))</label>
+      <input type="text" placeholder="DM00.." disabled>
       <input type="hidden" id="categoryIdInput">
       
       <div class="form-group">
@@ -138,7 +168,10 @@
             </tr>
           </thead>
           <tbody id="productsTableBody"></tbody>
+          
         </table>
+        <div id="productsPagination" class="pagination"></div>
+
       </div>
     </div>
   </div>
@@ -154,8 +187,8 @@
       <!-- Mã sản phẩm và Tên sản phẩm -->
       <div class="form-group">
         <div>
-          <label id="label"  for="productIdInput">Mã sản phẩm</label>
-          <input type="text" id="productIdInput">
+          <label id="label"  for="productIdInput">Mã sản phẩm(tự động tăng(SP001))</label>
+          <input type="text" id="productIdInput" disabled placeholder="SP00..">
         </div>
         <div>
           <label id="label" for="productNameInput">Tên sản phẩm</label>
@@ -169,8 +202,8 @@
         <label id="label" for="categorySelect">Danh mục</label>
         <select id="categorySelect" required>
           <option value="">Chọn danh mục</option>
-          <option value="Quần áo">Quần áo</option>
-          <option value="Giày dép">Giày dép</option>
+          <option value="điện thoại">điện thoại</option>
+          <option value="laptop">laptop</option>
           <option value="Phụ kiện">Phụ kiện</option>
         </select>
 
@@ -241,6 +274,9 @@
 
 
   <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="./idnex.js"></script>
+  
+
 </body>
 </html>

@@ -10,7 +10,7 @@
 
     let filteredCategories = [];
     let currentCategoryPage = 1;
-    const categoriesPerPage = 7;
+    const categoriesPerPage = 3;
 
     const totalCategoriesEl = document.getElementById('totalCategories');
     const totalProductsEl = document.getElementById('totalProducts');
@@ -26,7 +26,74 @@
       totalProductsEl.textContent = 'Tổng sản phẩm: ' + appData.products.length;
     }
 
+
+    let itemToDeleteId = null; // Store the ID of the item to delete
+let itemType = ''; // Store the type of item (category or product)
+// Function to open the delete confirmation modal
+// Gọi khi click vào nút xoá (ở bảng danh mục hoặc sản phẩm)
+function requestDeleteItem(id, name, type) {
+  itemToDeleteId = id;
+  itemType = type;
+  document.getElementById('itemName').textContent = name;
+  document.getElementById('deleteModal').style.display = 'block';
+}
+
+// Hủy
+function cancelDelete() {
+  itemToDeleteId = null;
+  itemType = '';
+  document.getElementById('deleteModal').style.display = 'none';
+}
+
+// Xác nhận
+function handleDelete(itemType, itemToDeleteId) {
+  if (itemType === 'category') {
+    console.log("Đang cố gắng xóa danh mục ID:", itemToDeleteId);
+
+    // Kiểm tra xem có sản phẩm nào liên kết với danh mục này không bằng cách so sánh tên danh mục
+    const category = appData.categories.find(cat => cat.id === itemToDeleteId);
+    const hasProducts = appData.products.some(product => product.category === category.name);
+    console.log("Danh mục này có sản phẩm không?", hasProducts);
+
+    if (hasProducts) {
+      alert(`Danh mục "${category.name}" đang được sử dụng bởi sản phẩm. Không thể xóa.`);
+      return; // ngăn chặn việc xóa
+    } else {
+      // Xác nhận xóa nếu không có sản phẩm liên kết
+      if (confirm(`Bạn có chắc chắn muốn xóa danh mục "${category.name}" không?`)) {
+        console.log("Đang xóa danh mục:", itemToDeleteId);
+        appData.categories = appData.categories.filter(category => category.id !== itemToDeleteId);
+        saveAppData();
+        applyFilters(); // Cập nhật bảng danh mục
+        console.log("Danh sách danh mục sau khi xóa:", appData.categories);
+        alert("Xóa danh mục thành công!");
+      }
+    }
+  } else if (itemType === 'product') {
+    // Xác nhận xóa cho sản phẩm
+    if (confirm(`Bạn có chắc chắn muốn xóa sản phẩm "${itemToDeleteId}" không?`)) {
+      appData.products = appData.products.filter(product => product.id !== itemToDeleteId);
+      saveAppData();
+      renderProductTable();
+      renderStatistics();
+      alert("Xóa sản phẩm thành công!");
+    }
+  }
+}
+
+
+
+
+function confirmDelete() {
+  handleDelete(itemType, itemToDeleteId);
+  cancelDelete(); // Đóng modal
+}
+
+
+
+
     function renderCategoryTable() {
+      
       categoriesBody.innerHTML = '';
       const totalItems = filteredCategories.length;
       const totalPages = Math.ceil(totalItems / categoriesPerPage) || 1;
@@ -46,12 +113,17 @@
             </td>
             <td>
               <span onclick="editCategoryById('${c.id}')"><button>✏️</button></span>
-              <span onclick="deleteCategoryById('${c.id}')"><button>🗑️</button></span>
+              <span onclick="requestDeleteItem('${c.id}', '${c.name}', 'category')"><button>🗑️</button></span>
+
             </td>
           </tr>`);
       });
       renderPagination(totalPages);
     }
+
+    let currentProductPage = 1;
+    const productsPerPage = 3;
+    
 
     function renderPagination(totalPages) {
       paginationEl.innerHTML = '';
@@ -67,7 +139,15 @@
 
     function renderProductTable() {
       productsBody.innerHTML = '';
-      appData.products.forEach(p => {
+    
+      const totalItems = appData.products.length;
+      const totalPages = Math.ceil(totalItems / productsPerPage) || 1;
+      if (currentProductPage > totalPages) currentProductPage = totalPages;
+    
+      const start = (currentProductPage - 1) * productsPerPage;
+      const pageItems = appData.products.slice(start, start + productsPerPage);
+    
+      pageItems.forEach(p => {
         productsBody.insertAdjacentHTML('beforeend', `
           <tr>
             <td>${p.id}</td>
@@ -88,17 +168,51 @@
             </td>
           </tr>`);
       });
+    
+      renderProductPagination(totalPages);
     }
+
+    function renderProductPagination(totalPages) {
+      const paginationProductEl = document.getElementById('productsPagination');
+      if (!paginationProductEl) return;
+      paginationProductEl.innerHTML = '';
+    
+      if (totalPages <= 1) return;
+    
+      if (currentProductPage > 1)
+        paginationProductEl.insertAdjacentHTML('beforeend', `<button onclick="changeProductPage(${currentProductPage - 1})">« Prev</button>`);
+    
+      for (let i = 1; i <= totalPages; i++) {
+        paginationProductEl.insertAdjacentHTML('beforeend', `<button class="${i === currentProductPage ? 'active' : ''}" onclick="changeProductPage(${i})">${i}</button>`);
+      }
+    
+      if (currentProductPage < totalPages)
+        paginationProductEl.insertAdjacentHTML('beforeend', `<button onclick="changeProductPage(${currentProductPage + 1})">Next »</button>`);
+    }
+    function changeProductPage(p) {
+      currentProductPage = p;
+      renderProductTable();
+    }
+        
+    
 
     function applyFilters() {
       const status = statusFilterEl.value;
       const catVal = categoryFilterEl.value.toLowerCase();
       const kw = searchInputEl.value.toLowerCase();
+      const sortSelectEl = document.getElementById('sort_select');
       filteredCategories = appData.categories.filter(c =>
         (status === 'all' || c.status === status) &&
         (!catVal || c.name.toLowerCase() === catVal) &&
         (!kw || c.name.toLowerCase().includes(kw))
       );
+      const sortType = sortSelectEl.value;
+      if (sortType === 'asc') {
+        filteredCategories.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (sortType === 'desc') {
+        filteredCategories.sort((a, b) => b.name.localeCompare(a.name));
+      }
+
       currentCategoryPage = 1;
       renderCategoryTable();
     }
@@ -116,7 +230,8 @@
           tab.classList.add('active');
           document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
           document.getElementById(tab.dataset.target).style.display = 'block';
-          if (tab.dataset.target === 'stats') renderStatistics();
+          if (tab.dataset.target === 'stats')
+             renderStatistics();
         };
       });
     });
@@ -162,13 +277,7 @@ function saveCategory() {
   alert("thêm mới thành công")
   applyFilters(); // Cập nhật bảng danh mục
 }
-function deleteCategoryById(id) {
-  if (confirm('Bạn có chắc muốn xóa danh mục này?')) {
-    appData.categories = appData.categories.filter(c => c.id !== id);
-    saveAppData();
-    applyFilters(); // Cập nhật bảng danh mục
-  }
-}
+
 
 
 function closeModal(modalId) {
@@ -256,3 +365,4 @@ function saveProduct() {
   renderProductTable();
   renderStatistics();
 }
+
